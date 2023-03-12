@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="favicon/favicon.png" type="image/png" />
+    <link rel="stylesheet" href="chat.css" />
+    <title>Chat</title>
+  </head>
+  <body>
+    <div class="site-container">
+      <main class="main">
+        <div class="chat">
+          <div class="chat__container container">
+            <div class="chat__wrap">
+              <button class="chat__menu-btn btn-reset"></button>
+              <div class="chat__menu">
+                <a href="#" class="chat__link chat__settings link-reset"
+                  >Настройки</a
+                >
+                <a href="#" class="chat__link chat__exit link-reset">Выйти</a>
+              </div>
+              <div class="chat__dialogue dialogue">
+                <!-- <div class="dialogue__message dialogue__message--my message">
+                  <span class="message__sender">Я:</span>
+                  <p class="message__text">
+                    А это второе и, кажется, оно очень длинное, чтобы
+                    поместиться на одной строке
+                  </p>
+                  <time class="message__time">19:13</time>
+                </div> -->
+
+                <!-- <div
+                  class="dialogue__message dialogue__message--interlocutor message"
+                >
+                  <span class="message__sender">Собеседник:</span>
+                  <p class="message__text">Привет, бла-бла</p>
+                  <time class="message__time">19:14</time>
+                </div> -->
+
+                <!-- <div
+                  class="dialogue__message dialogue__message--my message message--sent"
+                >
+                  <span class="message__sender">Я:</span>
+                  <p class="message__text">А это первое!</p>
+                  <time class="message__time">19:15</time>
+                </div> -->
+              </div>
+              <form class="chat__form" action="#" id="chat__form">
+                <input
+                  class="chat__input chat__message"
+                  type="text"
+                  placeholder="Сообщение..."
+                  id = "chat__input"
+                />
+                <input class="chat__input chat__send" id="chat__send" type="submit" value="" />
+              </form>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+		 <div class="modal open" id="login">
+			<div class="modal__wrap open">
+				<div class="modal__header">
+					<span class="modal__title">Авторизация</span>
+				</div>
+				<div class="modal__body">
+					<span class="modal__text">Почта:</span>
+					<form class="chat__form modal__form modal__form--login" action="#">
+						<input class="chat__input chat__message modal__email" type="email" placeholder="Введите почту..." />
+						<input
+							class="chat__input chat__send chat__send--login chat__send--code"
+							type="submit"
+							value="Получить код"
+						/>
+          </form>
+          <form class = "chat__form modal__form modal__form--login" id="enter__code__form">
+            <input class="chat__input chat__message chat__enter--code" id="enter__code__input" type="text" placeholder="Введите код..." />
+            <input
+							class="chat__input chat__send chat__send--login chat__send--enter"
+							type="submit"
+							value="Ввести код"
+						/>
+          </form>
+						
+					
+				</div>
+			</div>
+		</div> 
+
+		<div class="modal" id="confirmation">
+			<div class="modal__wrap">
+				<div class="modal__header">
+					<span class="modal__title">Подтверждение</span>
+					<button class="modal__close btn-reset">&#9587;</button>
+				</div>
+				<div class="modal__body">
+					<span class="modal__text">Код:</span>
+					<form
+						class="chat__form modal__form modal__form--confirmation"
+						action="#"
+					>
+						<input class="chat__input chat__message chat__send--enter-code" type="text" />
+						<input
+							class="chat__input chat__send chat__send--confirmation chat__send--authorization"
+							type="submit"
+							value="Вход"
+						/>
+					</form>
+				</div>
+			</div>
+		</div>
+
+    <div class="modal" id="settings">
+      <div class="modal__wrap">
+        <div class="modal__header">
+          <span class="modal__title">Настройки</span>
+          <button class="modal__close btn-reset">&#9587;</button>
+        </div>
+        <div class="modal__body">
+          <span class="modal__text">Имя в чате:</span>
+          <form class="chat__form modal__form" action="#">
+            <input class="chat__input chat__message" type="text" />
+            <input class="chat__input chat__send" type="submit" value="" />
+          </form>
+        </div>
+      </div>
+    </div>
+
+		<template id="myMessage">
+			<!-- <span class="message__sender">Я:</span>
+			<p class="message__text"></p>
+			<time class="message__time">19:13</time> -->
+            <div class="dialogue__message dialogue__message--my message">
+                <span class="message__sender">Я:</span>
+                <p class="message__text">
+                  
+                </p>
+                <time class="message__time">19:13</time>
+              </div>
+		</template>
+		<script src="chat.js" type="module"></script>
+	</body>
+</html>

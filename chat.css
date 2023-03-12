@@ -1,0 +1,352 @@
+html {
+    height: 100%;
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+  }
+  
+  *,
+  *::before,
+  *::after {
+    box-sizing: inherit;
+  }
+  
+  :root {
+    --dark-color: #000;
+    --light-color: rgb(43, 36, 36);
+    --error-color: rgb(240 100 100);
+    --background-color: #88acf0;
+    --aquamarine-color: #98e7c2;
+    --aero-blue: #bbffdf;
+  }
+  
+  @font-face {
+    font-family: 'Roboto';
+    src: url('fonts/Roboto.woff2') format('woff2');
+  }
+  
+  body {
+    margin: 0;
+    height: 100%;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    color: var(--dark-color);
+    background-color: var(--light-color);
+  }
+  
+  ::placeholder{
+    color:rgb(49, 49, 49)
+  }
+
+  .site-container {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    min-height: 100%;
+  }
+  
+  .main {
+    flex: 1 1 auto;
+  }
+  
+  .container {
+    margin: 0 auto;
+    padding: 15px;
+    max-width: 1200px;
+  }
+  
+  img {
+    max-width: 100%;
+    object-fit: cover;
+  }
+  
+  .link-reset {
+    text-decoration: none;
+    color: inherit;
+  }
+  
+  .list-reset {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .btn-reset {
+    border: none;
+    padding: 0;
+    color: inherit;
+    background-color: transparent;
+    cursor: pointer;
+  }
+  
+  .is-hidden {
+    display: none;
+  }
+  
+  .error {
+    border: 2px var(--error-color) solid;
+  }
+  
+  .chat__wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 320px;
+    height: 530px;
+    width: 100%;
+    gap: 8px;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .chat__container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+  }
+  
+  .chat__menu-btn {
+    z-index: 5;
+    position: absolute;
+    top: 8px;
+    width: 45px;
+    height: 20px;
+    border-radius: 15px;
+    background-image: url('img/icons/down-arrow.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 15px;
+    cursor: pointer;
+    border: 1px solid var(--dark-color);
+    transition: all 0.5s;
+  }
+  
+  .chat__menu-btn--active {
+    transform: rotateX(180deg);
+  }
+  
+  .chat__menu {
+    position: absolute;
+    width: 95%;
+    top: -40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: all 0.5s;
+  }
+  
+  .menu-open {
+    top: 8px;
+  }
+  
+  .chat__settings,
+  .chat__exit {
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.5s;
+  }
+  
+  .menu-open .chat__settings {
+    z-index: 3;
+    opacity: 1;
+    visibility: visible;
+  }
+  
+  .menu-open .chat__exit {
+    z-index: 3;
+    opacity: 1;
+    visibility: visible;
+  }
+
+  #enter__code__input{
+    margin-top: 10px;
+  }
+
+  .chat__dialogue {
+    width: 100%;
+    height: 530px;
+    flex-grow: 1;
+    border: 1px solid var(--dark-color);
+    background-color: var(--background-color);
+    padding: 8px 14px;
+    padding-bottom: 55px;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+  
+  .dialogue {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 8px;
+  }
+  
+  .dialogue__message--my {
+    align-self: flex-end;
+  }
+  
+  .dialogue__message--my::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    right: -23px;
+    clip-path: polygon(0 65%, 0 100%, 60% 100%);
+    background-color: inherit;
+    width: 30px;
+    height: 30px;
+  }
+  
+  .dialogue__message--interlocutor::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: -23px;
+    clip-path: polygon(100% 65%, 100% 100%, 35% 100%);
+    background-color: inherit;
+    width: 30px;
+    height: 30px;
+  }
+  
+  .dialogue__message--interlocutor > .message__text {
+    padding-right: 10px;
+  }
+  
+  .message {
+    position: relative;
+    width: fit-content;
+    padding: 8px;
+    background-color: var(--aquamarine-color);
+    border-radius: 5px;
+    max-width: 80%;
+    text-overflow: clip;
+    word-break: break-word;
+  }
+  
+  .message--sent {
+    background-color: var(--aero-blue);
+  }
+  
+  .message__text {
+    display: inline;
+    margin: 0;
+  }
+  
+  .message__time {
+    display: block;
+    margin-left: auto;
+    width: fit-content;
+    padding-top: 3px;
+  }
+  
+  .chat__link {
+    padding: 6px 8px;
+    border: 1px solid var(--dark-color);
+    border-radius: 15px;
+  }
+  
+  .chat__form {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    bottom: 8px;
+    width: 95%;
+  }
+  
+  .chat__input {
+    padding: 6px 8px;
+    border: 1px solid var(--dark-color);
+    line-height: 19px;
+    background-color: transparent;
+    font-family: inherit;
+    font-weight: inherit;
+    font-size: inherit;
+  }
+  
+  .chat__message {
+    flex-grow: 1;
+    border-radius: 15px;
+  }
+  
+  .chat__send {
+    width: 45px;
+    border-radius: 15px;
+    background-image: url('img/icons/arrow-top.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 15px;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  
+  .chat__send--login {
+    background-image: none;
+    width: fit-content;
+  }
+  
+  .chat__send--confirmation {
+    background-image: none;
+    width: fit-content;
+  }
+  
+  .modal {
+    visibility: hidden;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #000000c4;
+  }
+  
+  .modal__wrap {
+    visibility: hidden;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    min-height: 320px;
+    max-width: 300px;
+    padding: 16px 14px;
+    background-color: var(--background-color);
+    border-radius: 5px;
+  }
+  
+  .open {
+    visibility: visible;
+  }
+  
+  .modal__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 70px;
+  }
+  
+  .modal__text {
+    display: inline-block;
+    margin-bottom: 8px;
+  }
+  
+  .modal__form {
+    position: static;
+  }
+  
+  .modal__inner {
+    display: flex;
+    gap: 8px;
+  }
+  
+  .modal__form--login {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .modal__form--confirmation {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
