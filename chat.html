@@ -115,15 +115,15 @@
 		</div>
 
     <div class="modal" id="settings">
-      <div class="modal__wrap">
+      <div class="modal__wrap" id="settings__wrap">
         <div class="modal__header">
           <span class="modal__title">Настройки</span>
-          <button class="modal__close btn-reset">&#9587;</button>
+          <button class="modal__close btn-reset" id="reset__button">&#9587;</button>
         </div>
         <div class="modal__body">
           <span class="modal__text">Имя в чате:</span>
-          <form class="chat__form modal__form" action="#">
-            <input class="chat__input chat__message" type="text" />
+          <form class="chat__form modal__form" id="name__form" action="#">
+            <input class="chat__input chat__message" type="text" id="name__input" />
             <input class="chat__input chat__send" type="submit" value="" />
           </form>
         </div>
@@ -142,6 +142,8 @@
                 <time class="message__time">19:13</time>
               </div>
 		</template>
+    <script src = "authorization.js" type="module"></script>
 		<script src="chat.js" type="module"></script>
+    <script src = "settings.js" type="module" ></script>
 	</body>
 </html>

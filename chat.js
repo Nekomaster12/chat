@@ -1,4 +1,3 @@
-import { sendAuthCode } from "./authorization.js";
 import { CHAT_ELEMENTS } from "./chatElements.js";
 import { EmptyMessageError } from "./errors.js";
 
@@ -17,6 +16,9 @@ function createNewMessage(){
     return newMessage
 }
 
+function clearMessageInput(){
+    CHAT_ELEMENTS.MESSAGE_INPUT.value = ""
+}
 
 function renderMessage(event){
     event.preventDefault()
@@ -24,6 +26,7 @@ function renderMessage(event){
     if(checkMessage()){
     const newMessage = createNewMessage()
     CHAT_ELEMENTS.DIALOGUE.append(newMessage)
+    clearMessageInput()
     }}catch(error){
         alert(error)
     }

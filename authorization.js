@@ -1,6 +1,17 @@
+import Cookies from "js-cookie";
 import { AUTH_ELEMENTS } from "./authElements.js";
 import { minEmailLength, API } from "./const.js";
-import { WrongEmailGiven, ResponseError } from "./errors.js";
+import { WrongEmailGiven, ResponseError, WrongVerifyCode } from "./errors.js";
+
+renderLoginForm()
+
+function renderLoginForm(){
+    if(!Cookies.get("authCode")){
+        AUTH_ELEMENTS.AUTH_WINDOW.style.visibility = "visible"
+    }else{
+        AUTH_ELEMENTS.AUTH_WINDOW.style.display = "hidden"
+    }
+}
 
 
 function getEmail(){
@@ -20,7 +31,6 @@ function checkEmail(){
             arrobaCounter++
         }
     }
-    // console.log(dotCounter, arrobaCounter)
     if(dotCounter === 1 && arrobaCounter === 1 && email.length > minEmailLength){
         return true
     }else{
@@ -29,20 +39,6 @@ function checkEmail(){
 }
 
 export async function sendAuthCode(){
-    // 
-    // if(checkEmail()){
-    //     fetch(API, {
-    //         method: "POST",
-    //         headers: {
-    //             email: getEmail()
-    //         }
-    //     })
-    //     .then((result) => {console.log(result)})
-    //     .catch(() => {throw ResponseError})
-    // }
-    // }catch(error){
-    //     alert(error)
-    // }
     try{
     if(checkEmail()){
     const response = await fetch(API, {
@@ -55,15 +51,34 @@ export async function sendAuthCode(){
     // console.log(response)
     if(response.status > 299){
         throw ResponseError
-    }else{
-        const answer = await response.json()
-        // console.log(answer)
-    }
+        }
     }
 }catch(error){
     alert(error)
 }
+}
 
+async function verifyCode(){
+    try{
+    const code = AUTH_ELEMENTS.CODE_INPUT.value
+    const response = await fetch("https://edu.strada.one/api/user/me", {
+        headers: {
+            Authorization: `Bearer ${code}`
+        }
+    })
+    if(response.status <= 299){
+        Cookies.set("authCode", code)
+        renderLoginForm()
+    }else{
+        throw WrongVerifyCode
+    }}catch(error){
+        alert(error)
+    }
+}
+
+async function getMyData(){
+    await fetch("https://edu.strada.one/api/user/me")
 }
 
 AUTH_ELEMENTS.EMAIL_FORM.addEventListener("submit", sendAuthCode)
+AUTH_ELEMENTS.CODE_FORM.addEventListener("submit", verifyCode)

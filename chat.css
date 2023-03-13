@@ -14,8 +14,8 @@ html {
     --dark-color: #000;
     --light-color: rgb(43, 36, 36);
     --error-color: rgb(240 100 100);
-    --background-color: #88acf0;
-    --aquamarine-color: #98e7c2;
+    --background-color: #af95ebb0;
+    --aquamarine-color: #98e7c2c7;
     --aero-blue: #bbffdf;
   }
   
@@ -23,15 +23,30 @@ html {
     font-family: 'Roboto';
     src: url('fonts/Roboto.woff2') format('woff2');
   }
-  
+  .background-tint {
+    background-color: rgba(200,100,0,.5);
+    background-blend-mode: multiply;
+  }
+
   body {
+    background-blend-mode: multiply;
+    background-color: rgba(2, 2, 2, 0.5);
     margin: 0;
     height: 100%;
     font-family: 'Roboto', sans-serif;
     font-weight: 400;
     font-size: 16px;
-    color: var(--dark-color);
-    background-color: var(--light-color);
+    color: var(--dark-color);    
+    background-image: url(https://pibig.info/uploads/posts/2022-12/thumbs/1669843689_1-pibig-info-p-pyat-nevest-oboi-instagram-1.jpg);
+
+    background-position: center center;
+  /* определяет размер изображения на странице */
+  background-size: cover;
+  /* свойство устанавливает, будет ли повторяться изображение и каким образом */
+  background-repeat: no-repeat;
+  /* cвойство определяет, будет ли фоновое изображение прокручиваться 
+  вместе с остальной частью страницы или будет фиксированным */
+  background-attachment: fixed;
   }
   
   ::placeholder{
@@ -49,6 +64,10 @@ html {
     flex: 1 1 auto;
   }
   
+  #login{
+    display: none;
+  }
+
   .container {
     margin: 0 auto;
     padding: 15px;
@@ -144,7 +163,7 @@ html {
   .chat__settings,
   .chat__exit {
     opacity: 0;
-    visibility: hidden;
+    visibility: visible;
     transition: all 0.5s;
   }
   
