@@ -3,13 +3,60 @@ import { AUTH_ELEMENTS } from "./authElements.js";
 import { minEmailLength, API } from "./const.js";
 import { WrongEmailGiven, ResponseError, WrongVerifyCode } from "./errors.js";
 
-renderLoginForm()
+checkAuthCode()
+.then(renderLoginForm())
+
+async function checkAuthCode(){
+    try{
+    const response = await sendGetRequest()
+    if(response.status >= 299){
+        Cookies.remove("authCode")
+    }
+    }catch(error){
+        alert(error)
+    }
+}
+
+async function sendGetRequest(){
+    const response = await fetch("https://edu.strada.one/api/user/me", {
+            method: "GET",
+            headers: {
+                "Content-Type":"application/json;charset=utf-8",
+                "Authorization": `Bearer ${Cookies.get("authCode")}`
+            }
+        })
+    return await response
+}
+
+async function getUserData(){
+    try{
+    const response = await sendGetRequest()
+    const answer = await response.json()
+    const data = {
+        name: answer.name,
+        token: answer.token,
+        email:answer.email
+    }
+    console.log(data)
+    return data
+    }catch(error){
+        alert(error)
+    }
+}
+
+getUserData()
+
+function createSocket(){
+    const socket = new WebSocket(`wss://edu.strada.one/websockets?${Cookies.get("authCode")}`);
+    return socket
+}
+
 
 function renderLoginForm(){
     if(!Cookies.get("authCode")){
-        AUTH_ELEMENTS.AUTH_WINDOW.style.visibility = "visible"
+        AUTH_ELEMENTS.AUTH_WINDOW.style.display = "block"
     }else{
-        AUTH_ELEMENTS.AUTH_WINDOW.style.display = "hidden"
+        AUTH_ELEMENTS.AUTH_WINDOW.style.display = "none"
     }
 }
 
@@ -76,9 +123,6 @@ async function verifyCode(){
     }
 }
 
-async function getMyData(){
-    await fetch("https://edu.strada.one/api/user/me")
-}
 
 AUTH_ELEMENTS.EMAIL_FORM.addEventListener("submit", sendAuthCode)
 AUTH_ELEMENTS.CODE_FORM.addEventListener("submit", verifyCode)

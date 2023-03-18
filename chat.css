@@ -191,7 +191,6 @@ html {
     background-color: var(--background-color);
     padding: 8px 14px;
     padding-bottom: 55px;
-    overflow-y: auto;
     overflow-x: hidden;
   }
   
@@ -201,9 +200,16 @@ html {
     justify-content: flex-end;
     gap: 8px;
   }
-  
+  .wrap{
+    overflow-y: scroll;
+  }
+  .message__sender{
+    margin-right: 10px;
+  }
+
   .dialogue__message--my {
     align-self: flex-end;
+    align-items: right;
   }
   
   .dialogue__message--my::before {
@@ -241,6 +247,7 @@ html {
     max-width: 80%;
     text-overflow: clip;
     word-break: break-word;
+    margin-bottom: 10px;
   }
   
   .message--sent {

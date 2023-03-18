@@ -54,22 +54,11 @@ async function setNewName(event){
         }
     }
     }catch(error){
-        console.log(error)
+        alert(error)
     }
 }
 
-async function getUserData(){
-    const response = await fetch("https://edu.strada.one/api/user/me", {
-            method: "GET",
-            headers: {
-                "Content-Type":"application/json;charset=utf-8",
-                "Authorization": `Bearer ${Cookies.get("authCode")}`
-            }
-        })
-    const answer = await response.json()
-    console.log(answer)
-}
-getUserData()
+
 
 SETTINGS_ELEMENTS.OPEN_BUTTON.addEventListener("click", openSettings)
 SETTINGS_ELEMENTS.CLOSE_BUTTON.addEventListener("click", closeSettings)
