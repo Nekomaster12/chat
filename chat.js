@@ -54,9 +54,14 @@ function renderMyMessage(message = CHAT_ELEMENTS.MESSAGE_INPUT.value){
     clearMessageInput()
 }
 
-window.socket.onmessage = (event) => {
+window.socket.onmessage = async function(event){
     const message = JSON.parse((event.data))
-    createOthersMessage(message)
+    const myData = await getMyData()
+    if(message.user.email !== myData.email){
+    const tosend = createOthersMessage(message)
+    // document.querySelector("#chatWrap").prepend(tosend)
+    document.querySelector("#chatWrap").append(tosend)
+    }
 }
 
 function formatDate(item){
