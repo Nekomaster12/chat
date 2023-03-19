@@ -1,9 +1,8 @@
 import Cookies from "js-cookie";
 import { AUTH_ELEMENTS } from "./authElements.js";
-import { minEmailLength, API, arrobaCount, authorizationCode, trueArrobaCount } from "./const.js";
+import { minEmailLength, API, authorizationCode, trueArrobaCount } from "./const.js";
 import { WrongEmailGiven, ResponseError, WrongVerifyCode } from "./errors.js";
 
-//! const code = AUTH_ELEMENTS.CODE_INPUT.value
 checkAuthCode()
 .then(Authorize())
 
@@ -32,9 +31,7 @@ async function sendGetRequest(){
 export async function getMyData(){
     try{
     const response = await sendGetRequest()
-    const data = await response.json()
-    console.log(data)
-    return data
+    return await response.json()
     }catch(error){
         alert(error)
     }
@@ -49,42 +46,13 @@ async function Authorize(){
     }
 }
 
-
-// async function createSocket(){
-//     const socket = await new WebSocket(`wss://edu.strada.one/websockets?${Cookies.get(authorizationCode)}`);
-//     return socket
-// }
-
-
-// export async function sendMessage(message){
-//     if(message.length !== 0){
-//         console.log(await socket)
-//         (await socket).onopen = await function(){
-//             socket.send(JSON.stringify({ text: message }));
-//         }
-//     }
-// }
-
-// async function getMessage(){
-//     (await socket).onmessage = function(event){
-//         console.log(event.data)
-//     }
-// }
-
-// sendMessage(socket, "чупапи")
-
-
 function checkEmail(){
     let arrobaCounter = 0;
-    console.log(AUTH_ELEMENTS.EMAIL_INPUT.value)
     for(let item of AUTH_ELEMENTS.EMAIL_INPUT.value){
         if(item === "@"){
-            console.log(item)
             arrobaCounter++
         }
     }
-    console.log(arrobaCounter)
-    console.log(arrobaCounter === trueArrobaCount && AUTH_ELEMENTS.EMAIL_INPUT.value.length > minEmailLength)
     if(arrobaCounter === trueArrobaCount && AUTH_ELEMENTS.EMAIL_INPUT.value.length > minEmailLength){
         return true
     }else{
@@ -106,7 +74,6 @@ export async function sendAuthCode(){
         },
         body: JSON.stringify({email:AUTH_ELEMENTS.EMAIL_INPUT.value})
     })
-    // console.log(response)
     if(response.status > 299){
         throw ResponseError
         }else{

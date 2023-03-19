@@ -42,7 +42,6 @@ function sendMyMessage(event){
 function renderMyMessage(message = CHAT_ELEMENTS.MESSAGE_INPUT.value){
     try{
     const newMessage = createNewMessage(message)
-    console.log(document.querySelector("#chatWrap"))
     if(message === CHAT_ELEMENTS.MESSAGE_INPUT.value){
     document.querySelector("#chatWrap").append(newMessage)
     }else{
@@ -57,11 +56,8 @@ function renderMyMessage(message = CHAT_ELEMENTS.MESSAGE_INPUT.value){
 
 window.socket.onmessage = (event) => {
     const message = JSON.parse((event.data))
-    console.log(message)
-    console.log("AAAAAA")
     createOthersMessage(message)
 }
-
 
 function formatDate(item){
     const date = new Date(item)
@@ -108,10 +104,7 @@ async function getChatHistory(){
 async function showChatHistory(){
     const chatHisory = await getChatHistory()
     const myData = await getMyData()
-    console.log(myData)
-    console.log(chatHisory.messages)
     for(let message of await chatHisory.messages){
-        console.log(message.user.email!==myData.email)
         if(message.user.email !== myData.email){
         CHAT_ELEMENTS.MESSAGE_HISTORY.prepend(createOthersMessage(message))
         }else{
