@@ -2,7 +2,9 @@ import { CHAT_ELEMENTS } from "./chatElements.js";
 import { EmptyMessageError, ResponseError} from "./errors.js";
 import Cookies from "js-cookie";
 import format from "date-fns/format";
-if(Cookies.get("authCode") ){
+import { authorizationCode, EMPTY } from "./const.js";
+import { getMyData } from "./authorization.js";
+if(Cookies.get(authorizationCode) ){
     showChatHistory()
 }
 
@@ -18,6 +20,7 @@ function checkMessage(){
 function createNewMessage(messageText = null){
     const message = document.querySelector("#myMessage")
     if(messageText === null){
+    checkMessage()
     message.content.querySelector("p").textContent = CHAT_ELEMENTS.MESSAGE_INPUT.value
     }else{
         message.content.querySelector("p").textContent = messageText
@@ -27,21 +30,38 @@ function createNewMessage(messageText = null){
 }
 
 function clearMessageInput(){
-    CHAT_ELEMENTS.MESSAGE_INPUT.value = ""
+    CHAT_ELEMENTS.MESSAGE_INPUT.value = EMPTY
 }
 
-function renderMyMessage(event){
+function sendMyMessage(event){
     event.preventDefault()
+    socket.send(JSON.stringify({ text: CHAT_ELEMENTS.MESSAGE_INPUT.value}));
+    renderMyMessage()
+}
+
+function renderMyMessage(message = CHAT_ELEMENTS.MESSAGE_INPUT.value){
     try{
-    if(checkMessage()){
-    const newMessage = createNewMessage()
+    const newMessage = createNewMessage(message)
+    console.log(document.querySelector("#chatWrap"))
+    if(message === CHAT_ELEMENTS.MESSAGE_INPUT.value){
     document.querySelector("#chatWrap").append(newMessage)
-    clearMessageInput()
-    }}catch(error){
+    }else{
+        document.querySelector("#chatWrap").prepend(newMessage)
+    }
+    }catch(error){
         alert(error)
     }
     scrollDown()
+    clearMessageInput()
 }
+
+window.socket.onmessage = (event) => {
+    const message = JSON.parse((event.data))
+    console.log(message)
+    console.log("AAAAAA")
+    createOthersMessage(message)
+}
+
 
 function formatDate(item){
     const date = new Date(item)
@@ -76,7 +96,7 @@ async function getChatHistory(){
     method: "GET",
     headers: {
         "Content-Type":"application/json;charset=utf-8",
-        "Authorization": `Bearer ${Cookies.get("authCode")}`
+        "Authorization": `Bearer ${Cookies.get(authorizationCode)}`
     }
 })
     if(!(await response).ok){
@@ -87,13 +107,20 @@ async function getChatHistory(){
 
 async function showChatHistory(){
     const chatHisory = await getChatHistory()
+    const myData = await getMyData()
+    console.log(myData)
     console.log(chatHisory.messages)
     for(let message of await chatHisory.messages){
+        console.log(message.user.email!==myData.email)
+        if(message.user.email !== myData.email){
         CHAT_ELEMENTS.MESSAGE_HISTORY.prepend(createOthersMessage(message))
+        }else{
+            renderMyMessage(message.text)
+        }
+        
     }
     CHAT_ELEMENTS.DIALOGUE.prepend(CHAT_ELEMENTS.MESSAGE_HISTORY)
     scrollDown()
 }
 
-CHAT_ELEMENTS.MESSAGE_FORM.addEventListener("submit", renderMyMessage)
-
+CHAT_ELEMENTS.MESSAGE_FORM.addEventListener("submit", function(event){sendMyMessage(event)})

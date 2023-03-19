@@ -1,6 +1,6 @@
 import { SETTINGS_ELEMENTS } from "./settingsElements.js";
 import { EmptyErrorGiven, ResponseError } from "./errors.js";
-import { maxNameLength } from "./const.js";
+import { API_USER, EMPTY, maxNameLength } from "./const.js";
 import Cookies from "js-cookie";
 
 function openSettings(){
@@ -22,7 +22,7 @@ function getNewName(){
 
 function checkNewName(){
     const name = getNewName()
-    if(name !== "" && name.length <= maxNameLength){
+    if(name !== EMPTY && name.length <= maxNameLength){
             return true
     }else{
         throw EmptyErrorGiven
@@ -30,18 +30,18 @@ function checkNewName(){
 }
 
 function clearNameInput(){
-    SETTINGS_ELEMENTS.NAME_INPUT.value = ""
+    SETTINGS_ELEMENTS.NAME_INPUT.value = EMPTY
 }
 
 async function setNewName(event){
     event.preventDefault()
     try{
     if(checkNewName()){
-        const response = await fetch("https://edu.strada.one/api/user", {
+        const response = await fetch(API_USER, {
             method: "PATCH",
             headers: {
                 "Content-Type":"application/json;charset=utf-8",
-                "Authorization": `Bearer ${Cookies.get("authCode")}`
+                "Authorization": `Bearer ${Cookies.get(authorizationCode)}`
             },
             body: JSON.stringify({name: getNewName()})
             

@@ -1,16 +1,17 @@
 import Cookies from "js-cookie";
 import { AUTH_ELEMENTS } from "./authElements.js";
-import { minEmailLength, API } from "./const.js";
+import { minEmailLength, API, arrobaCount, authorizationCode, trueArrobaCount } from "./const.js";
 import { WrongEmailGiven, ResponseError, WrongVerifyCode } from "./errors.js";
 
+//! const code = AUTH_ELEMENTS.CODE_INPUT.value
 checkAuthCode()
-.then(renderLoginForm())
+.then(Authorize())
 
 async function checkAuthCode(){
     try{
     const response = await sendGetRequest()
     if(response.status >= 299){
-        Cookies.remove("authCode")
+        Cookies.remove(authorizationCode)
     }
     }catch(error){
         alert(error)
@@ -22,21 +23,16 @@ async function sendGetRequest(){
             method: "GET",
             headers: {
                 "Content-Type":"application/json;charset=utf-8",
-                "Authorization": `Bearer ${Cookies.get("authCode")}`
+                "Authorization": `Bearer ${Cookies.get(authorizationCode)}`
             }
         })
     return await response
 }
 
-async function getUserData(){
+export async function getMyData(){
     try{
     const response = await sendGetRequest()
-    const answer = await response.json()
-    const data = {
-        name: answer.name,
-        token: answer.token,
-        email:answer.email
-    }
+    const data = await response.json()
     console.log(data)
     return data
     }catch(error){
@@ -44,45 +40,60 @@ async function getUserData(){
     }
 }
 
-getUserData()
-
-function createSocket(){
-    const socket = new WebSocket(`wss://edu.strada.one/websockets?${Cookies.get("authCode")}`);
-    return socket
-}
-
-
-function renderLoginForm(){
-    if(!Cookies.get("authCode")){
+async function Authorize(){
+    if(!Cookies.get(authorizationCode)){
         AUTH_ELEMENTS.AUTH_WINDOW.style.display = "block"
     }else{
         AUTH_ELEMENTS.AUTH_WINDOW.style.display = "none"
+        window.socket = new WebSocket(`wss://edu.strada.one/websockets?${Cookies.get(authorizationCode)}`);
     }
 }
 
 
-function getEmail(){
-    const email = AUTH_ELEMENTS.EMAIL_INPUT.value
-    return email
-}
+// async function createSocket(){
+//     const socket = await new WebSocket(`wss://edu.strada.one/websockets?${Cookies.get(authorizationCode)}`);
+//     return socket
+// }
+
+
+// export async function sendMessage(message){
+//     if(message.length !== 0){
+//         console.log(await socket)
+//         (await socket).onopen = await function(){
+//             socket.send(JSON.stringify({ text: message }));
+//         }
+//     }
+// }
+
+// async function getMessage(){
+//     (await socket).onmessage = function(event){
+//         console.log(event.data)
+//     }
+// }
+
+// sendMessage(socket, "чупапи")
+
 
 function checkEmail(){
-    const email = getEmail()
-    // console.log(email)
-    let dotCounter = 0;
     let arrobaCounter = 0;
-    for(let item of email){
-        if(item === "."){
-            dotCounter++
-        }else if(item === "@"){
+    console.log(AUTH_ELEMENTS.EMAIL_INPUT.value)
+    for(let item of AUTH_ELEMENTS.EMAIL_INPUT.value){
+        if(item === "@"){
+            console.log(item)
             arrobaCounter++
         }
     }
-    if(dotCounter === 1 && arrobaCounter === 1 && email.length > minEmailLength){
+    console.log(arrobaCounter)
+    console.log(arrobaCounter === trueArrobaCount && AUTH_ELEMENTS.EMAIL_INPUT.value.length > minEmailLength)
+    if(arrobaCounter === trueArrobaCount && AUTH_ELEMENTS.EMAIL_INPUT.value.length > minEmailLength){
         return true
     }else{
         throw WrongEmailGiven
     }
+}
+
+function clearEmailInput(){
+    AUTH_ELEMENTS.EMAIL_INPUT.value = ""
 }
 
 export async function sendAuthCode(){
@@ -93,11 +104,14 @@ export async function sendAuthCode(){
         headers: {
             "Content-Type":"application/json;charset=utf-8"
         },
-        body: JSON.stringify({email:getEmail()})
+        body: JSON.stringify({email:AUTH_ELEMENTS.EMAIL_INPUT.value})
     })
     // console.log(response)
     if(response.status > 299){
         throw ResponseError
+        }else{
+            alert("the code is sent")
+            clearEmailInput()
         }
     }
 }catch(error){
@@ -113,9 +127,9 @@ async function verifyCode(){
             Authorization: `Bearer ${code}`
         }
     })
-    if(response.status <= 299){
-        Cookies.set("authCode", code)
-        renderLoginForm()
+    if(response.ok){
+        Cookies.set(authorizationCode, code)
+        Authorize()
     }else{
         throw WrongVerifyCode
     }}catch(error){
